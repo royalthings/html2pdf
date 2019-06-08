@@ -62,7 +62,8 @@ class CreatorViewController: UIViewController {
     func createTextField(mark: [String: String], key: String!) {
         if html.contains(key) {
             textField.borderStyle = .roundedRect
-            textField.placeholder = "\(String(describing: mark[key]))"
+            guard let phString = mark[key] else { return }
+            textField.placeholder = "\(String(describing: phString))"
             view.addSubview(textField)
 
             textField.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +101,8 @@ class CreatorViewController: UIViewController {
         guard let outputURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Документ - \(formatAndGetCurrentDate())").appendingPathExtension("pdf") else {fatalError("Destination URL not created")}
         pdfData.write(to: outputURL, atomically: true)
         
-        print("open \(outputURL.path)")
+        //print("open \(outputURL.path)")
+
         
         activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
         present(activityViewController!, animated: true, completion: nil)

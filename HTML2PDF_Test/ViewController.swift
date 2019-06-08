@@ -14,8 +14,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
     
     var docs: [[String: String]] = []
-    var selectedDocIndex: Int!
-    
     
     @IBOutlet weak var tableList: UITableView!
     
@@ -36,14 +34,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 destanationViewController?.docInfo = docs[indexPath.row] as [String : AnyObject]
             }
         }
-        
-        
-//        if let indentifier = segue.identifier {
-//            if indentifier == "idSeguePresentCreator" {
-//                let creatorViewController = segue.destination as! CreatorViewController
-//                creatorViewController.docInfo = docs[selectedDocIndex] as [String : AnyObject]
-//            }
-//        }
     }
     
     // MARK: UITableView Delegate and Datasource Methods
@@ -62,9 +52,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if cell == nil {
             cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "idSegue")
         }
+        
         let docKey = docs[indexPath.row].keys
-        cell.textLabel?.text = "\(docKey)"
-        return cell
+        for value in docKey {
+            cell.textLabel?.text = "\(value)"
+            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+            return cell
+        }
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -72,9 +67,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedDocIndex = indexPath.row
         performSegue(withIdentifier: "idSeguePresentCreator", sender: self)
-
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
