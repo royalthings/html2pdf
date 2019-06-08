@@ -11,43 +11,75 @@ import UIKit
 class CreatorViewController: UIViewController {
 
     let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
-    let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "htm")
+    let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
     
     var docInfo: [String: AnyObject]!
     
-    
+    var activityViewController: UIActivityViewController? = nil
     
     let A4PageWidth: CGFloat = 595.2
     let A4PageHeight: CGFloat = 841.8
-    let toTextField = UITextField()
+    
+    let textField = UITextField()
+    
     var html: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        toTextField.isHidden = true
-        
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
         
-        let mark = "#TO#"
-        
+        let mark = ["#TO#": "Назва установи", "#TO_INDEX#": "Індекс", "#TO_CITY#": "Місто", "#TO_STREET#": "Вулиця", "#TO_BUILDING#": "Будинок"]
+
+
+
         html = renderString(path: pathToDocHTMLTemplate!)
         
-        if html.contains(mark) {
-            toTextField.isHidden = false
-            toTextField.frame = CGRect(x: 20, y: 100, width: 250, height: 32)
-            toTextField.borderStyle = .roundedRect
-            toTextField.placeholder = "Назва"
-            view.addSubview(toTextField)
+        //        textField.frame = CGRect(x: 16, y: 150, width: 250, height: 32)
+        //        textField.borderStyle = .roundedRect
+        //        textField.placeholder = "Назва установи"
+        //        view.addSubview(textField)
+        
+
+//            if html.contains("#TO#") {
+//                toTextField.isHidden = false
+//                toTextField.frame = CGRect(x: 16, y: 100, width: view.bounds.size.width - 32, height: 32)
+//                toTextField.borderStyle = .roundedRect
+//                toTextField.placeholder = "Назва установи"
+//                view.addSubview(toTextField)
+//            }
+        
             
-            
-        }
+
+        createTextField(html: html, mark: mark, key: "#TO#")
+        //createTextField(html: html, mark: mark, key: "#TO_INDEX#")
+    
     }
 
+    //Create text fields
+    func createTextField(html: String, mark: [String: String], key: String) {
+        if html.contains(key) {
+            textField.borderStyle = .roundedRect
+            textField.placeholder = "\(String(describing: mark[key]))"
+            view.addSubview(textField)
+
+            textField.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                textField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+                textField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+                textField.heightAnchor.constraint(equalToConstant: 30),
+                textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                textField.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 15)
+                ])
+        }
+    }
+    
+    
     @objc func rightButtonAction(sender: UIBarButtonItem) {
         
-        html = html.replacingOccurrences(of: "#TO#", with: toTextField.text!)
+        html = html.replacingOccurrences(of: "#TO#", with: textField.text!)
+        //html = html.replacingOccurrences(of: "#TO_INDEX#", with: textField.text!)
         let fml = UIMarkupTextPrintFormatter(markupText: html)
         
         let render = UIPrintPageRenderer()
@@ -69,6 +101,8 @@ class CreatorViewController: UIViewController {
         
         print("open \(outputURL.path)")
         
+        activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
+        present(activityViewController!, animated: true, completion: nil)
     }
     
     func formatAndGetCurrentDate() -> String {
