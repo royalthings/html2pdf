@@ -22,19 +22,20 @@ class CreatorViewController: UIViewController {
     
     let textField = UITextField()
     
-    var html: String!
+    var html: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
         
         let mark = ["#TO#": "Назва установи", "#TO_INDEX#": "Індекс", "#TO_CITY#": "Місто", "#TO_STREET#": "Вулиця", "#TO_BUILDING#": "Будинок"]
 
-
-
-        html = renderString(path: pathToDocHTMLTemplate!)
+        for value in docInfo.values {
+            html = renderString(path: value as! String)
+        }
+        
         
         //        textField.frame = CGRect(x: 16, y: 150, width: 250, height: 32)
         //        textField.borderStyle = .roundedRect
@@ -52,13 +53,13 @@ class CreatorViewController: UIViewController {
         
             
 
-        createTextField(html: html, mark: mark, key: "#TO#")
+        createTextField(mark: mark, key: "#TO#")
         //createTextField(html: html, mark: mark, key: "#TO_INDEX#")
     
     }
 
     //Create text fields
-    func createTextField(html: String, mark: [String: String], key: String) {
+    func createTextField(mark: [String: String], key: String!) {
         if html.contains(key) {
             textField.borderStyle = .roundedRect
             textField.placeholder = "\(String(describing: mark[key]))"

@@ -30,12 +30,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let indentifier = segue.identifier {
-            if indentifier == "idSeguePresentCreator" {
-                let creatorViewController = segue.destination as! CreatorViewController
-                creatorViewController.docInfo = docs[selectedDocIndex] as [String : AnyObject]
+        if segue.identifier == "idSeguePresentCreator" {
+            if let indexPath = tableList.indexPathForSelectedRow {
+                let destanationViewController = segue.destination as? CreatorViewController
+                destanationViewController?.docInfo = docs[indexPath.row] as [String : AnyObject]
             }
         }
+        
+        
+//        if let indentifier = segue.identifier {
+//            if indentifier == "idSeguePresentCreator" {
+//                let creatorViewController = segue.destination as! CreatorViewController
+//                creatorViewController.docInfo = docs[selectedDocIndex] as [String : AnyObject]
+//            }
+//        }
     }
     
     // MARK: UITableView Delegate and Datasource Methods
