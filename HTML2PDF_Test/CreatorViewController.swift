@@ -20,8 +20,12 @@ class CreatorViewController: UIViewController {
     let A4PageWidth: CGFloat = 595.2
     let A4PageHeight: CGFloat = 841.8
     
-    let textField = UITextField()
     
+    var arrayTextFields: [UITextField] = []
+    var firstIdentTextField: CGFloat = 15.0
+    
+    let markArray = [["#TO#": "Назва установи"], ["#TO_INDEX#": "Індекс"], ["#TO_CITY#": "Місто"], ["#TO_STREET#": "Вулиця"], ["#TO_BUILDING#": "Будинок"], ["#NAME#": "ПІБ"]]
+
     var html: String = ""
     
     override func viewDidLoad() {
@@ -29,37 +33,23 @@ class CreatorViewController: UIViewController {
 
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
-        
-        let mark = ["#TO#": "Назва установи", "#TO_INDEX#": "Індекс", "#TO_CITY#": "Місто", "#TO_STREET#": "Вулиця", "#TO_BUILDING#": "Будинок"]
 
         for value in docInfo.values {
             html = renderString(path: value as! String)
         }
-        
-        
-        //        textField.frame = CGRect(x: 16, y: 150, width: 250, height: 32)
-        //        textField.borderStyle = .roundedRect
-        //        textField.placeholder = "Назва установи"
-        //        view.addSubview(textField)
-        
-
-//            if html.contains("#TO#") {
-//                toTextField.isHidden = false
-//                toTextField.frame = CGRect(x: 16, y: 100, width: view.bounds.size.width - 32, height: 32)
-//                toTextField.borderStyle = .roundedRect
-//                toTextField.placeholder = "Назва установи"
-//                view.addSubview(toTextField)
-//            }
-        
-            
-
-        createTextField(mark: mark, key: "#TO#")
-        //createTextField(html: html, mark: mark, key: "#TO_INDEX#")
-    
+ 
+        for value in markArray {
+            for key in value.keys {
+                createTextField(mark: value, key: key, constant: firstIdentTextField)
+             }
+        }
     }
 
     //Create text fields
-    func createTextField(mark: [String: String], key: String!) {
+    func createTextField(mark: [String: String], key: String!, constant: CGFloat) {
+ 
+        let textField = UITextField()
+        
         if html.contains(key) {
             textField.borderStyle = .roundedRect
             guard let phString = mark[key] else { return }
@@ -72,16 +62,26 @@ class CreatorViewController: UIViewController {
                 textField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
                 textField.heightAnchor.constraint(equalToConstant: 30),
                 textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                textField.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 15)
+                textField.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: constant)
                 ])
+            
+             firstIdentTextField += 38
         }
+        arrayTextFields.append(textField)
+        print(arrayTextFields)
     }
-    
+
     
     @objc func rightButtonAction(sender: UIBarButtonItem) {
+        var index = 0
+        for value in markArray {
+            for key in value.keys {
+                html = html.replacingOccurrences(of: key, with: arrayTextFields[index].text!)
+                index += 1
+            }
+        }
         
-        html = html.replacingOccurrences(of: "#TO#", with: textField.text!)
-        //html = html.replacingOccurrences(of: "#TO_INDEX#", with: textField.text!)
+        
         let fml = UIMarkupTextPrintFormatter(markupText: html)
         
         let render = UIPrintPageRenderer()
@@ -100,13 +100,13 @@ class CreatorViewController: UIViewController {
         
         guard let outputURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Документ - \(formatAndGetCurrentDate())").appendingPathExtension("pdf") else {fatalError("Destination URL not created")}
         pdfData.write(to: outputURL, atomically: true)
-        
-        //print("open \(outputURL.path)")
 
         
         activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
         present(activityViewController!, animated: true, completion: nil)
     }
+    
+    
     
     func formatAndGetCurrentDate() -> String {
         let timestamp = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: .medium, timeStyle: .short)
