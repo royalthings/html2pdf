@@ -74,6 +74,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="PPl-yA-c5S" firstAttribute="width" secondItem="ryT-GH-6CT" secondAttribute="width" id="5b5-CY-aEY"/>
+                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="height" secondItem="ryT-GH-6CT" secondAttribute="height" id="9hi-Mu-j0I"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="CqZ-5m-ZJh" id="80e-4f-zfp"/>
