@@ -10,6 +10,13 @@ import UIKit
 
 class CreatorViewController: UIViewController {
 
+    //MARK: - add Outlet
+    @IBOutlet weak var myScrollView: UIScrollView!
+    @IBOutlet weak var myView: UIView!
+    
+    
+    //MARK: - add variables and constants
+    //docs
     let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
     let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
     
@@ -24,13 +31,14 @@ class CreatorViewController: UIViewController {
     var arrayTextFields: [UITextField] = []
     var firstIdentTextField: CGFloat = 15.0
     
-    let markArray = [["#TO#": "Назва установи"], ["#TO_INDEX#": "Індекс"], ["#TO_CITY#": "Місто"], ["#TO_STREET#": "Вулиця"], ["#TO_BUILDING#": "Будинок"], ["#NAME#": "ПІБ"]]
+    //Mark
+    let markArray = [["#TO#": "Назва установи"], ["#TO_INDEX#": "Індекс"], ["#TO_CITY#": "Місто"], ["#TO_STREET#": "Вулиця"], ["#TO_BUILDING#": "Будинок"], ["#PERSON#": "Від кого"], ["#PERSON_INDEX#": "Індекс заявника"], ["#PERSON_REGION#": "Область заявника"], ["#PERSON_CITY#": "Місто заявника"], ["#PERSON_STREET#": "Вулиця заявника"], ["#PERSON_BUILDING#": "Будинок заявника"], ["#PERSON_APARTMENT#": "Квартира заявника"], ["#PERSON_ID#": "Ідентифікаційний номер заявника"], ["#NAME#": "ПІБ"]]
 
     var html: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //add save button - rightBarButtonItem
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
 
@@ -43,6 +51,10 @@ class CreatorViewController: UIViewController {
                 createTextField(mark: value, key: key, constant: firstIdentTextField)
              }
         }
+        //add scroll view
+        myScrollView.contentSize.height = myView.bounds.size.height
+        myScrollView.addSubview(myView)
+        view.addSubview(myScrollView)
     }
 
     //Create text fields
@@ -54,24 +66,23 @@ class CreatorViewController: UIViewController {
             textField.borderStyle = .roundedRect
             guard let phString = mark[key] else { return }
             textField.placeholder = "\(String(describing: phString))"
-            view.addSubview(textField)
+            myView.addSubview(textField)
 
             textField.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                textField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
-                textField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+                textField.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 16),
+                textField.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -16),
                 textField.heightAnchor.constraint(equalToConstant: 30),
-                textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                textField.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: constant)
+                textField.centerXAnchor.constraint(equalTo: myView.centerXAnchor),
+                textField.topAnchor.constraint(equalTo: myView.topAnchor, constant: constant)
                 ])
             
              firstIdentTextField += 38
         }
         arrayTextFields.append(textField)
-        print(arrayTextFields)
     }
 
-    
+    // Action
     @objc func rightButtonAction(sender: UIBarButtonItem) {
         var index = 0
         for value in markArray {

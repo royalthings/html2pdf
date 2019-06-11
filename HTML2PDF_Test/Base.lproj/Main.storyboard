@@ -64,33 +64,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ryT-GH-6CT">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryT-GH-6CT">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PPl-yA-c5S">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPl-yA-c5S">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="centerX" secondItem="ryT-GH-6CT" secondAttribute="centerX" id="RlD-nX-WJR"/>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="leading" secondItem="ryT-GH-6CT" secondAttribute="leading" id="WQy-3p-j7N"/>
-                                    <constraint firstAttribute="trailing" secondItem="PPl-yA-c5S" secondAttribute="trailing" id="bOi-iN-LBT"/>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="top" secondItem="ryT-GH-6CT" secondAttribute="top" id="cWd-Oo-vgE"/>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="centerY" secondItem="ryT-GH-6CT" secondAttribute="centerY" id="vBk-ID-MWR"/>
-                                    <constraint firstAttribute="bottom" secondItem="PPl-yA-c5S" secondAttribute="bottom" id="xuU-FJ-DxI"/>
+                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="width" secondItem="ryT-GH-6CT" secondAttribute="width" id="5b5-CY-aEY"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="CqZ-5m-ZJh" id="80e-4f-zfp"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ryT-GH-6CT" firstAttribute="bottom" secondItem="SiJ-xS-AVE" secondAttribute="bottom" id="Me4-Qy-5ym"/>
-                            <constraint firstItem="ryT-GH-6CT" firstAttribute="top" secondItem="SiJ-xS-AVE" secondAttribute="top" id="i9G-8A-iMo"/>
-                            <constraint firstItem="ryT-GH-6CT" firstAttribute="trailing" secondItem="SiJ-xS-AVE" secondAttribute="trailing" id="oxR-fO-Ctu"/>
-                            <constraint firstItem="ryT-GH-6CT" firstAttribute="leading" secondItem="SiJ-xS-AVE" secondAttribute="leading" id="uxA-Gg-BB4"/>
+                            <constraint firstItem="ryT-GH-6CT" firstAttribute="bottom" secondItem="SiJ-xS-AVE" secondAttribute="bottom" id="3wP-6Z-MG0"/>
+                            <constraint firstItem="ryT-GH-6CT" firstAttribute="top" secondItem="SiJ-xS-AVE" secondAttribute="top" id="40b-Gk-jlL"/>
+                            <constraint firstItem="ryT-GH-6CT" firstAttribute="trailing" secondItem="SiJ-xS-AVE" secondAttribute="trailing" id="Tlr-3I-4Yv"/>
+                            <constraint firstItem="ryT-GH-6CT" firstAttribute="leading" secondItem="SiJ-xS-AVE" secondAttribute="leading" id="s1q-bT-dEY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SiJ-xS-AVE"/>
                     </view>
+                    <connections>
+                        <outlet property="myScrollView" destination="ryT-GH-6CT" id="s7Z-pt-qCX"/>
+                        <outlet property="myView" destination="PPl-yA-c5S" id="KbP-C4-AQd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N9I-hs-N11" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -112,7 +114,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IGt-xh-0xD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="32.799999999999997" y="111.99400299850076"/>
+            <point key="canvasLocation" x="33" y="123"/>
         </scene>
     </scenes>
 </document>
