@@ -8,10 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
 
-    let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
-    let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
+    fileprivate let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
+    fileprivate let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
     
     var docs: [[String: String]] = []
     
@@ -35,8 +35,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-    
+}
     // MARK: UITableView Delegate and Datasource Methods
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

@@ -10,6 +10,8 @@ import UIKit
 
 class CreatorViewController: UIViewController {
 
+    var activityViewController: UIActivityViewController? = nil
+    
     //MARK: - add Outlet
     @IBOutlet weak var myScrollView: UIScrollView!
     @IBOutlet weak var myView: UIView!
@@ -17,28 +19,27 @@ class CreatorViewController: UIViewController {
     
     //MARK: - add variables and constants
     //docs
-    let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
-    let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
+    fileprivate let pathToDocHTMLTemplate = Bundle.main.path(forResource: "Template", ofType: "htm")
+    fileprivate let pathToDocHTMLTemplate2 = Bundle.main.path(forResource: "Template2", ofType: "html")
     
     var docInfo: [String: AnyObject]!
+    var html: String = ""
     
-    var activityViewController: UIActivityViewController? = nil
-    
+    //format A4
     let A4PageWidth: CGFloat = 595.2
     let A4PageHeight: CGFloat = 841.8
-    
     
     var arrayTextFields: [UITextField] = []
     var firstIdentTextField: CGFloat = 15.0
     
-    //Mark
+    //MARK: - mark array
     let markArray = [["#TO#": "Назва установи"], ["#TO_INDEX#": "Індекс"], ["#TO_CITY#": "Місто"], ["#TO_STREET#": "Вулиця"], ["#TO_BUILDING#": "Будинок"], ["#PERSON#": "Від кого"], ["#PERSON_INDEX#": "Індекс заявника"], ["#PERSON_REGION#": "Область заявника"], ["#PERSON_CITY#": "Місто заявника"], ["#PERSON_STREET#": "Вулиця заявника"], ["#PERSON_BUILDING#": "Будинок заявника"], ["#PERSON_APARTMENT#": "Квартира заявника"], ["#PERSON_ID#": "Ідентифікаційний номер заявника"], ["#NAME#": "ПІБ"]]
 
-    var html: String = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //add save button - rightBarButtonItem
+        //MARK: - add save button - rightBarButtonItem
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
 
@@ -48,7 +49,7 @@ class CreatorViewController: UIViewController {
  
         for value in markArray {
             for key in value.keys {
-                createTextField(mark: value, key: key, constant: firstIdentTextField)
+                _ = createTextField(mark: value, key: key)
              }
         }
         //add scroll view
@@ -57,47 +58,50 @@ class CreatorViewController: UIViewController {
         view.addSubview(myScrollView)
     }
 
-    //Create text fields
-    func createTextField(mark: [String: String], key: String!, constant: CGFloat) {
+    //MARK: - Create text fields
+    func createTextField(mark: [String: String], key: String!) -> UITextField {
  
         let textField = UITextField()
         
         if html.contains(key) {
             textField.borderStyle = .roundedRect
-            guard let phString = mark[key] else { return }
+            guard let phString = mark[key] else { return UITextField() }
             textField.placeholder = "\(String(describing: phString))"
             myView.addSubview(textField)
-
             textField.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                textField.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 16),
-                textField.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -16),
-                textField.heightAnchor.constraint(equalToConstant: 30),
-                textField.centerXAnchor.constraint(equalTo: myView.centerXAnchor),
-                textField.topAnchor.constraint(equalTo: myView.topAnchor, constant: constant)
-                ])
+
+            let margins = myView.layoutMarginsGuide
             
-             firstIdentTextField += 38
+            NSLayoutConstraint.activate([
+                textField.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+                textField.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
+                textField.topAnchor.constraint(equalTo: myView.topAnchor, constant: firstIdentTextField)
+                ])
+            firstIdentTextField += 38
+            
         }
+
         arrayTextFields.append(textField)
+
+        return UITextField()
     }
 
-    // Action
+    //MARK: - Action
     @objc func rightButtonAction(sender: UIBarButtonItem) {
         var index = 0
         for value in markArray {
             for key in value.keys {
-                html = html.replacingOccurrences(of: key, with: arrayTextFields[index].text!)
+                guard let textReplacing = arrayTextFields[index].text else { return }
+                html = html.replacingOccurrences(of: key, with: textReplacing)
                 index += 1
             }
         }
-        
-        
+
         let fml = UIMarkupTextPrintFormatter(markupText: html)
         
         let render = UIPrintPageRenderer()
         render.addPrintFormatter(fml, startingAtPageAt: 0)
-        let page = CGRect(x: 0, y: 0, width: A4PageWidth, height: A4PageHeight)
+        let page = CGRect(x: 0, y: 20, width: A4PageWidth, height: A4PageHeight)
         render.setValue(page, forKey: "paperRect")
         render.setValue(page, forKey: "printableRect")
         
@@ -108,23 +112,36 @@ class CreatorViewController: UIViewController {
             render.drawPage(at: i, in: UIGraphicsGetPDFContextBounds())
         }
         UIGraphicsEndPDFContext()
-        
-        guard let outputURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Документ - \(formatAndGetCurrentDate())").appendingPathExtension("pdf") else {fatalError("Destination URL not created")}
-        pdfData.write(to: outputURL, atomically: true)
+    
+        _ = createFile()
 
-        
         activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
         present(activityViewController!, animated: true, completion: nil)
     }
+
+    //create file
+        fileprivate func createFile() {
+            let fileManager = FileManager.default
+            let fileName = "Документ - \(formatAndGetCurrentDate())"
     
-    
-    
-    func formatAndGetCurrentDate() -> String {
+            do {
+                let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                let fileName = documentDirectory.appendingPathComponent(fileName)
+                let outputURL = fileName.appendingPathExtension("pdf")
+                print(outputURL)
+            } catch {
+                print("Destination URL not created")
+            }
+        }
+
+    //create Current Date
+    fileprivate func formatAndGetCurrentDate() -> String {
         let timestamp = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: .medium, timeStyle: .short)
         return timestamp
     }
     
-    func renderString(path: String) -> String! {
+    //create string
+    fileprivate func renderString(path: String) -> String! {
         do {
             let HTMLContent = try String(contentsOfFile: path)
             return HTMLContent
@@ -133,5 +150,9 @@ class CreatorViewController: UIViewController {
         }
         return nil
     }
+    
+}
+    // MARK: UIScrollView Delegate Methods
+extension CreatorViewController: UIScrollViewDelegate {
     
 }
