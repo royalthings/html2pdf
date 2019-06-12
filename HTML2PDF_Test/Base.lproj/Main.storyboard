@@ -64,17 +64,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryT-GH-6CT">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryT-GH-6CT">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPl-yA-c5S">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PPl-yA-c5S">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="603" id="oy7-iA-Agj"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="width" secondItem="ryT-GH-6CT" secondAttribute="width" id="5b5-CY-aEY"/>
-                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="height" secondItem="ryT-GH-6CT" secondAttribute="height" id="9hi-Mu-j0I"/>
+                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="top" secondItem="ryT-GH-6CT" secondAttribute="top" id="2xk-rM-IM3"/>
+                                    <constraint firstItem="PPl-yA-c5S" firstAttribute="leading" secondItem="ryT-GH-6CT" secondAttribute="leading" id="FeZ-UW-Qfx"/>
+                                    <constraint firstAttribute="trailing" secondItem="PPl-yA-c5S" secondAttribute="trailing" id="iWa-Y8-VIl"/>
+                                    <constraint firstAttribute="bottom" secondItem="PPl-yA-c5S" secondAttribute="bottom" id="lmz-8t-1Ne"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="CqZ-5m-ZJh" id="80e-4f-zfp"/>
@@ -86,6 +91,7 @@
                             <constraint firstItem="ryT-GH-6CT" firstAttribute="bottom" secondItem="SiJ-xS-AVE" secondAttribute="bottom" id="3wP-6Z-MG0"/>
                             <constraint firstItem="ryT-GH-6CT" firstAttribute="top" secondItem="SiJ-xS-AVE" secondAttribute="top" id="40b-Gk-jlL"/>
                             <constraint firstItem="ryT-GH-6CT" firstAttribute="trailing" secondItem="SiJ-xS-AVE" secondAttribute="trailing" id="Tlr-3I-4Yv"/>
+                            <constraint firstItem="PPl-yA-c5S" firstAttribute="width" secondItem="s0q-ze-q3M" secondAttribute="width" id="Y1u-NU-ulK"/>
                             <constraint firstItem="ryT-GH-6CT" firstAttribute="leading" secondItem="SiJ-xS-AVE" secondAttribute="leading" id="s1q-bT-dEY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SiJ-xS-AVE"/>

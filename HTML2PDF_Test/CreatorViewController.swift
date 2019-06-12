@@ -39,6 +39,7 @@ class CreatorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+               
         //MARK: - add save button - rightBarButtonItem
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
@@ -56,6 +57,13 @@ class CreatorViewController: UIViewController {
         myScrollView.contentSize.height = myView.bounds.size.height
         myScrollView.addSubview(myView)
         view.addSubview(myScrollView)
+        
+        HideKeyboard()
+        //MARK: - Notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        
+    
     }
 
     //MARK: - Create text fields
@@ -69,7 +77,7 @@ class CreatorViewController: UIViewController {
             textField.placeholder = "\(String(describing: phString))"
             myView.addSubview(textField)
             textField.translatesAutoresizingMaskIntoConstraints = false
-
+            textField.delegate = self
             let margins = myView.layoutMarginsGuide
             
             NSLayoutConstraint.activate([
@@ -82,7 +90,7 @@ class CreatorViewController: UIViewController {
         }
 
         arrayTextFields.append(textField)
-
+        
         return UITextField()
     }
 
@@ -118,6 +126,7 @@ class CreatorViewController: UIViewController {
         activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
         present(activityViewController!, animated: true, completion: nil)
     }
+    
 
     //create file
         fileprivate func createFile() {
@@ -151,8 +160,38 @@ class CreatorViewController: UIViewController {
         return nil
     }
     
-}
-    // MARK: UIScrollView Delegate Methods
-extension CreatorViewController: UIScrollViewDelegate {
+    //MARK: - Keyboard
+    fileprivate func HideKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(DismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
     
+    @objc func DismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardDidShow(notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+            myScrollView.contentInset = contentInsets
+            myScrollView.scrollIndicatorInsets = contentInsets
+        }
+    }
+    @objc func keyboardWillBeHidden(notification: NSNotification) {
+        let contentInsets = UIEdgeInsets.zero
+        myScrollView.contentInset = contentInsets
+        myScrollView.scrollIndicatorInsets = contentInsets
+    }
+    
+}
+
+// MARK: UITextField Delegate Methods
+extension CreatorViewController: UITextFieldDelegate {
+   
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
