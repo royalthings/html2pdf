@@ -9,13 +9,12 @@
 import UIKit
 
 class CreatorViewController: UIViewController {
-
+    
     var activityViewController: UIActivityViewController? = nil
     
     //MARK: - add Outlet
     @IBOutlet weak var myScrollView: UIScrollView!
     @IBOutlet weak var myView: UIView!
-    
     
     //MARK: - add variables and constants
     //docs
@@ -34,41 +33,34 @@ class CreatorViewController: UIViewController {
     
     //MARK: - mark array
     let markArray = [["#TO#": "Назва установи"], ["#TO_INDEX#": "Індекс"], ["#TO_CITY#": "Місто"], ["#TO_STREET#": "Вулиця"], ["#TO_BUILDING#": "Будинок"], ["#PERSON#": "Від кого"], ["#PERSON_INDEX#": "Індекс заявника"], ["#PERSON_REGION#": "Область заявника"], ["#PERSON_CITY#": "Місто заявника"], ["#PERSON_STREET#": "Вулиця заявника"], ["#PERSON_BUILDING#": "Будинок заявника"], ["#PERSON_APARTMENT#": "Квартира заявника"], ["#PERSON_ID#": "Ідентифікаційний номер заявника"], ["#NAME#": "ПІБ"]]
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-               
+        
         //MARK: - add save button - rightBarButtonItem
         let rightButtonItem = UIBarButtonItem.init(title: "SAVE", style: .done, target: self, action: #selector(rightButtonAction))
         self.navigationItem.rightBarButtonItem = rightButtonItem
-
+        
         for value in docInfo.values {
             html = renderString(path: value as! String)
         }
- 
+        
         for value in markArray {
             for key in value.keys {
-                _ = createTextField(mark: value, key: key)
-             }
+                createTextField(mark: value, key: key)
+            }
         }
-        //add scroll view
-        myScrollView.contentSize.height = myView.bounds.size.height
-        myScrollView.addSubview(myView)
-        view.addSubview(myScrollView)
         
         HideKeyboard()
+        
         //MARK: - Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-        
-    
     }
-
+    
     //MARK: - Create text fields
-    func createTextField(mark: [String: String], key: String!) -> UITextField {
- 
+    @discardableResult func createTextField(mark: [String: String], key: String!) -> UITextField {
+        
         let textField = UITextField()
         
         if html.contains(key) {
@@ -86,26 +78,15 @@ class CreatorViewController: UIViewController {
                 textField.topAnchor.constraint(equalTo: myView.topAnchor, constant: firstIdentTextField)
                 ])
             firstIdentTextField += 38
-            
         }
-
         arrayTextFields.append(textField)
-        
         return UITextField()
     }
-
+    
     //MARK: - Action
     @objc func rightButtonAction(sender: UIBarButtonItem) {
-        var index = 0
-        for value in markArray {
-            for key in value.keys {
-                guard let textReplacing = arrayTextFields[index].text else { return }
-                html = html.replacingOccurrences(of: key, with: textReplacing)
-                index += 1
-            }
-        }
-
-        let fml = UIMarkupTextPrintFormatter(markupText: html)
+        
+        let fml = UIMarkupTextPrintFormatter(markupText: replacingHtml())
         
         let render = UIPrintPageRenderer()
         render.addPrintFormatter(fml, startingAtPageAt: 0)
@@ -120,32 +101,51 @@ class CreatorViewController: UIViewController {
             render.drawPage(at: i, in: UIGraphicsGetPDFContextBounds())
         }
         UIGraphicsEndPDFContext()
-    
-        _ = createFile()
 
+        pdfData.write(to: createFile(), atomically: true)
+        
         activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
         present(activityViewController!, animated: true, completion: nil)
     }
     
-
-    //create file
-        fileprivate func createFile() {
-            let fileManager = FileManager.default
-            let fileName = "Документ - \(formatAndGetCurrentDate())"
-    
-            do {
-                let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                let fileName = documentDirectory.appendingPathComponent(fileName)
-                let outputURL = fileName.appendingPathExtension("pdf")
-                print(outputURL)
-            } catch {
-                print("Destination URL not created")
+    //MARK: - replacing mark in string
+    fileprivate func replacingHtml() -> String {
+        var index = 0
+        if index <= markArray.count {
+            for value in markArray {
+                for key in value.keys {
+                    if let textReplacing = arrayTextFields[index].text {
+                        html = html.replacingOccurrences(of: key, with: textReplacing)
+                        index += 1
+                    } else {
+                        alertMassage(message: "Нет полей для ввода значений.")
+                    }
+                }
             }
         }
+        return html
+    }
 
+    //create file
+    fileprivate func createFile() -> URL! {
+        let fileManager = FileManager.default
+        let fileName = "Документ - \(formatAndGetCurrentDate())"
+        
+        do {
+            let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let fileName = documentDirectory.appendingPathComponent(fileName)
+            let outputURL = fileName.appendingPathExtension("pdf")
+            print(outputURL)
+            return outputURL
+        } catch {
+            alertMassage(message: "URL не создан.")
+        }
+        return nil
+    }
+    
     //create Current Date
     fileprivate func formatAndGetCurrentDate() -> String {
-        let timestamp = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: .medium, timeStyle: .short)
+        let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .short)
         return timestamp
     }
     
@@ -155,7 +155,7 @@ class CreatorViewController: UIViewController {
             let HTMLContent = try String(contentsOfFile: path)
             return HTMLContent
         } catch {
-            print("Unable to open and use HTML template files.")
+            alertMassage(message: "Ошибка открытия HTML файла.")
         }
         return nil
     }
@@ -179,17 +179,26 @@ class CreatorViewController: UIViewController {
             myScrollView.scrollIndicatorInsets = contentInsets
         }
     }
-    @objc func keyboardWillBeHidden(notification: NSNotification) {
+    @objc func keyboardWillBeHidden(notification: Notification) {
         let contentInsets = UIEdgeInsets.zero
         myScrollView.contentInset = contentInsets
         myScrollView.scrollIndicatorInsets = contentInsets
     }
     
+    //MARK: - Alert massage
+    fileprivate func alertMassage(message: String) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default) { [weak self] (action) in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        alertController.addAction(alertAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
 
 // MARK: UITextField Delegate Methods
 extension CreatorViewController: UITextFieldDelegate {
-   
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
