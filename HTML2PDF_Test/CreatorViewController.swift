@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class CreatorViewController: UIViewController {
     
@@ -115,8 +116,16 @@ class CreatorViewController: UIViewController {
             for value in markArray {
                 for key in value.keys {
                     if let textReplacing = arrayTextFields[index].text {
-                        html = html.replacingOccurrences(of: key, with: textReplacing)
-                        index += 1
+                        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+                        hud.label.text = "Загрузка..."
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.html = self.html.replacingOccurrences(of: key, with: textReplacing)
+                            index += 1
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.seconds(5), execute: {
+                                hud.hide(animated: true)
+                            })
+                        }
+                        
                     } else {
                         alertMassage(message: "Нет полей для ввода значений.")
                     }

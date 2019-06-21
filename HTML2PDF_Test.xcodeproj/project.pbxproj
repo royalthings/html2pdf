@@ -15,9 +15,12 @@
 		6E262B5522AA806D00E415BD /* CreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E262B5422AA806D00E415BD /* CreatorViewController.swift */; };
 		6E77E35E22ABFC0600F00E19 /* Template.htm in Resources */ = {isa = PBXBuildFile; fileRef = 6E77E35D22ABFC0600F00E19 /* Template.htm */; };
 		6E77E36022ABFC4D00F00E19 /* Template2.html in Resources */ = {isa = PBXBuildFile; fileRef = 6E77E35F22ABFC4D00F00E19 /* Template2.html */; };
+		A2E3F271B3543493401165CD /* Pods_HTML2PDF_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E91DACA63DDEE8BA04121FC1 /* Pods_HTML2PDF_Test.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E97DC09BE25AAB224B521CB /* Pods-HTML2PDF_Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HTML2PDF_Test.debug.xcconfig"; path = "Target Support Files/Pods-HTML2PDF_Test/Pods-HTML2PDF_Test.debug.xcconfig"; sourceTree = "<group>"; };
+		31829634EECB990C4402FD6C /* Pods-HTML2PDF_Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HTML2PDF_Test.release.xcconfig"; path = "Target Support Files/Pods-HTML2PDF_Test/Pods-HTML2PDF_Test.release.xcconfig"; sourceTree = "<group>"; };
 		6E262B3B22AA7E8700E415BD /* HTML2PDF_Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTML2PDF_Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E262B3E22AA7E8700E415BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E262B4022AA7E8700E415BD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -28,6 +31,7 @@
 		6E262B5422AA806D00E415BD /* CreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorViewController.swift; sourceTree = "<group>"; };
 		6E77E35D22ABFC0600F00E19 /* Template.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Template.htm; sourceTree = "<group>"; };
 		6E77E35F22ABFC4D00F00E19 /* Template2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Template2.html; sourceTree = "<group>"; };
+		E91DACA63DDEE8BA04121FC1 /* Pods_HTML2PDF_Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HTML2PDF_Test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2E3F271B3543493401165CD /* Pods_HTML2PDF_Test.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +51,8 @@
 			children = (
 				6E262B3D22AA7E8700E415BD /* HTML2PDF_Test */,
 				6E262B3C22AA7E8700E415BD /* Products */,
+				F756B807B3C8FFA043C4CDBD /* Pods */,
+				ECBAAA60D6364833F08B4CEE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +80,24 @@
 			path = HTML2PDF_Test;
 			sourceTree = "<group>";
 		};
+		ECBAAA60D6364833F08B4CEE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E91DACA63DDEE8BA04121FC1 /* Pods_HTML2PDF_Test.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F756B807B3C8FFA043C4CDBD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2E97DC09BE25AAB224B521CB /* Pods-HTML2PDF_Test.debug.xcconfig */,
+				31829634EECB990C4402FD6C /* Pods-HTML2PDF_Test.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -80,9 +105,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E262B4D22AA7E8900E415BD /* Build configuration list for PBXNativeTarget "HTML2PDF_Test" */;
 			buildPhases = (
+				2FED42EC76BB15C4FA90F840 /* [CP] Check Pods Manifest.lock */,
 				6E262B3722AA7E8700E415BD /* Sources */,
 				6E262B3822AA7E8700E415BD /* Frameworks */,
 				6E262B3922AA7E8700E415BD /* Resources */,
+				05ED0E23DB612B4D8D27BC40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -140,6 +167,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		05ED0E23DB612B4D8D27BC40 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HTML2PDF_Test/Pods-HTML2PDF_Test-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HTML2PDF_Test/Pods-HTML2PDF_Test-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HTML2PDF_Test/Pods-HTML2PDF_Test-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2FED42EC76BB15C4FA90F840 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HTML2PDF_Test-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6E262B3722AA7E8700E415BD /* Sources */ = {
@@ -292,6 +361,7 @@
 		};
 		6E262B4E22AA7E8900E415BD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E97DC09BE25AAB224B521CB /* Pods-HTML2PDF_Test.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -310,6 +380,7 @@
 		};
 		6E262B4F22AA7E8900E415BD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 31829634EECB990C4402FD6C /* Pods-HTML2PDF_Test.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
